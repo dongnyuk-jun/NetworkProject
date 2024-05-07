@@ -14,6 +14,7 @@ public class VendingMachine
 	
 	public static void main(String [] args) throws IOException
 	{
+		//1
 		new VendingMachine("127.0.0.1", 1345);
 	}
 	
