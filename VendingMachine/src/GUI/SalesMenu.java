@@ -84,6 +84,7 @@ public class SalesMenu extends JPanel
 			imgItems[i] = new ImageIcon("./image/item" + i + ".jpg");
 			btnItems[i] = new JButton(Integer.toString(i));
 			btnItems[i].setIcon(imgItems[i]);
+			btnItems[i].setBorderPainted(false);
 			btnItems[i].setBackground(Color.DARK_GRAY);
 			btnItems[i].setEnabled(false);
 			btnItems[i].addActionListener(new ActionListener()
