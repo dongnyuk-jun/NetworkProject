@@ -35,12 +35,14 @@ public class AdminMenu extends JPanel
 		
 
 		JButton [] btnNameItem = new JButton[6];
-		ImageIcon [] imgNameItem = new ImageIcon[6];
+		ImageIcon [] imgItem = new ImageIcon[6];
+		for(int i = 0; i < 6;i++)
+			imgItem[i] = new ImageIcon("./image/item" + i + ".jpg");
+			
 		for(int i = 0; i < 6; i++)
 		{
-			imgNameItem[i] = new ImageIcon("./image/item" + i + ".jpg");
 			btnNameItem[i] = new JButton(Integer.toString(i));
-			btnNameItem[i].setIcon(imgNameItem[i]);
+			btnNameItem[i].setIcon(imgItem[i]);
 			
 			btnNameItem[i].addActionListener(new ActionListener()
 			{
@@ -51,6 +53,23 @@ public class AdminMenu extends JPanel
 				}
 			});
 			panelName.add(btnNameItem[i]);
+		}
+		
+		JButton [] btnPriceItem = new JButton[6];
+		for(int i = 0; i < 6; i++)
+		{
+			btnPriceItem[i] = new JButton(Integer.toString(i));
+			btnPriceItem[i].setIcon(imgItem[i]);
+			
+			btnPriceItem[i].addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					
+				}
+			});
+			panelPrice.add(btnPriceItem[i]);
 		}
 		
 		
@@ -91,6 +110,14 @@ public class AdminMenu extends JPanel
 		add(btnName);
 		
 		JButton btnPrice = new JButton("가격 변경");
+		btnPrice.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				layoutAdmin.show(panelAdmin, "price");
+			}
+		});
 		add(btnPrice);
 		
 		JButton btnMoney = new JButton("화폐 현황");
