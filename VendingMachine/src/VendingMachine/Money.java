@@ -203,11 +203,6 @@ public class Money
 				}
 			}
 			
-			if(balance > 0)
-			{
-				System.out.println(balance);
-			}
-			
 			for(int i = 0; i < 5; i++)
 			{
 				txtMoney += tmp.get(i).toString() + "\n";
@@ -228,6 +223,73 @@ public class Money
 	
 	public void returnMoney()
 	{
+		BufferedReader moneyReader = null;
+		try
+		{
+			StringTokenizer st;
+			moneyReader = new BufferedReader(new FileReader("./manager/money.txt"));
+			
+			for(int i = 0; i < 5;i++)
+			{
+				st = new StringTokenizer(moneyReader.readLine());
+				String count = st.nextToken();
+				
+				money.set(i, Integer.parseInt(count));
+			}
+			moneyReader.close();
+		}
+		catch (IOException e)
+		{
+			
+		}
 		
+		while(balance != 0)
+		{
+			//
+			if(money.get(4) >= balance / 1000)
+			{
+				money.set(4, money.get(4) - balance / 1000);
+				balance %= 1000;
+			}
+			else if(money.get(3) >= balance / 500)
+			{
+				money.set(3, money.get(3) - balance / 500);
+				balance %= 500;
+			}
+			else if(money.get(2) >= balance / 100)
+			{
+				money.set(2, money.get(2) - balance / 100);
+				balance %= 100;
+			}
+			else if(money.get(1) >= balance / 50)
+			{
+				money.set(1, money.get(1) - balance / 50);
+				balance %= 50;
+			}
+			else if(money.get(0) >= balance / 10)
+			{
+				money.set(0, money.get(0) - balance / 10);
+				balance %= 10;
+			}
+		}
+
+		BufferedWriter moneyWriter = null;
+		String txtMoney = "";
+		for(int i = 0; i < 5; i++)
+		{
+			txtMoney += money.get(i).toString() + "\n";
+		}
+		
+		try
+		{
+			moneyWriter = new BufferedWriter(new FileWriter("./manager/money.txt"));
+			moneyWriter.write(txtMoney);
+			moneyWriter.close();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

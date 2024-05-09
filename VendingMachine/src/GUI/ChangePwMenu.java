@@ -43,14 +43,9 @@ public class ChangePwMenu extends JPanel
 				{
 					admin.changePassword(newPw);
 					
-					p.setText("");
 					layoutCard.show(panelCard, "sales");
 				}
-				else
-				{
-					p.setToolTipText("숫자와 특수문자를 각각 한 개 이상씩 포함하여 주십시오.");
-					p.setText("");
-				}
+				p.setText("");
 				
 			}
 			

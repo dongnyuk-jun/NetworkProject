@@ -12,6 +12,14 @@ import VendingMachine.Sell;
 public class SalesMenu extends JPanel
 {
 	Vector<String> itemName = new Vector<String>();
+
+	JButton [] btnItems = new JButton[6];
+	ImageIcon [] imgItems = new ImageIcon[6];
+	
+
+	JButton [] btnMoney = new JButton[5];
+	ImageIcon [] imgMoney = new ImageIcon[5];
+	
 	public SalesMenu(Sell sell, CardLayout layoutCard, JPanel panelCard)
 	{
 		for(int i = 0; i < sell.items.size(); i++)
@@ -43,7 +51,15 @@ public class SalesMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				
+				sell.money.returnMoney();
+				textBalance.setText(Integer.toString(sell.money.getBalance()) + "¿ø");
+				for(int i = 0; i < 6; i++)
+				{
+					if(sell.items.get(i).getCount() > 0 && sell.items.get(i).getPrice() <= sell.money.getBalance())
+						btnItems[i].setEnabled(true);
+					else
+						btnItems[i].setEnabled(false);
+				}
 			}
 			
 		});
@@ -77,8 +93,6 @@ public class SalesMenu extends JPanel
 		panelItems.setPreferredSize(panelSize);
 		panelItems.setBackground(Color.GREEN);
 		
-		JButton [] btnItems = new JButton[6];
-		ImageIcon [] imgItems = new ImageIcon[6];
 		for(int i = 0; i < 6; i++)
 		{
 			imgItems[i] = new ImageIcon("./image/item" + i + ".jpg");
@@ -122,8 +136,6 @@ public class SalesMenu extends JPanel
 		panelMoney.setPreferredSize(panelSize);
 		panelMoney.setBackground(Color.BLUE);
 		
-		JButton [] btnMoney = new JButton[5];
-		ImageIcon [] imgMoney = new ImageIcon[5];
 		for(int i = 0; i < 5; i++)
 		{
 			imgMoney[i] = new ImageIcon("./image/money" + i + ".jpg");
