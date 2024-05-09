@@ -245,31 +245,48 @@ public class Money
 		
 		while(balance != 0)
 		{
+			System.out.println(balance);
 			//
-			if(money.get(4) >= balance / 1000)
+			if(balance >= 1000)
 			{
-				money.set(4, money.get(4) - balance / 1000);
-				balance %= 1000;
+				if(money.get(4) >= balance / 1000)
+				{
+					money.set(4, money.get(4) - balance / 1000);
+					balance %= 1000;
+				}
 			}
-			else if(money.get(3) >= balance / 500)
+			if(balance >= 500)
 			{
-				money.set(3, money.get(3) - balance / 500);
-				balance %= 500;
+				if(money.get(3) >= balance / 500)
+				{
+					money.set(3, money.get(3) - balance / 500);
+					balance %= 500;
+				}
 			}
-			else if(money.get(2) >= balance / 100)
+			if(balance >= 100)
 			{
-				money.set(2, money.get(2) - balance / 100);
-				balance %= 100;
+				if(money.get(2) >= balance / 100)
+				{
+					money.set(2, money.get(2) - balance / 100);
+					balance %= 100;
+				}
 			}
-			else if(money.get(1) >= balance / 50)
+			if(balance >= 50)
 			{
-				money.set(1, money.get(1) - balance / 50);
-				balance %= 50;
+				if(money.get(1) >= balance / 50)
+				{
+					money.set(1, money.get(1) - balance / 50);
+					balance %= 50;
+				}
 			}
-			else if(money.get(0) >= balance / 10)
+			if(balance >= 10)
 			{
-				money.set(0, money.get(0) - balance / 10);
-				balance %= 10;
+
+				if(money.get(0) >= balance / 10)
+				{
+					money.set(0, money.get(0) - balance / 10);
+					balance %= 10;
+				}
 			}
 		}
 
@@ -291,5 +308,12 @@ public class Money
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public int getNowoney(int i)
+	{
+		if(i > 5)
+			return -1;
+		return money.get(i);
 	}
 }

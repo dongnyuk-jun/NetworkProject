@@ -5,9 +5,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import VendingMachine.Sell;
+
 public class AdminMenu extends JPanel
 {
-	public AdminMenu(CardLayout layoutCard, JPanel panelCard)
+	public AdminMenu(CardLayout layoutCard, JPanel panelCard, Sell sell)
 	{
 		setLayout(new FlowLayout());
 		
@@ -24,12 +26,19 @@ public class AdminMenu extends JPanel
 
 		CardLayout layoutAdmin = new CardLayout();
 		JPanel panelAdmin = new JPanel(layoutAdmin);
+		panelAdmin.setPreferredSize(new Dimension(1900, 800));
 		
 		panelAdmin.add(panelCollect, "collect");
 		panelAdmin.add(panelName, "name");
 		panelAdmin.add(panelPrice, "price");
 		panelAdmin.add(panelMoney, "money");
 		panelAdmin.add(panelChangeName, "changeName");
+		
+		panelCollect.setBackground(Color.red);
+		panelName.setBackground(Color.orange);
+		panelPrice.setBackground(Color.yellow);
+		panelMoney.setBackground(Color.green);
+		panelChangeName.setBackground(Color.blue);
 		
 		add(panelAdmin);
 		
@@ -72,7 +81,6 @@ public class AdminMenu extends JPanel
 			panelPrice.add(btnPriceItem[i]);
 		}
 		
-		
 
 		JTextField textNewName = new JTextField();
 		textNewName.setPreferredSize(new Dimension(400, 30));
@@ -80,6 +88,24 @@ public class AdminMenu extends JPanel
 		
 		JButton btnOK = new JButton("확인");
 		panelChangeName.add(btnOK);
+
+
+		ImageIcon [] imgMoney = new ImageIcon[5];
+		JLabel [] labelMoney = new JLabel[5];
+		JTextField [] textMoney = new JTextField[5];
+		for(int i = 0; i < 5; i++)
+		{
+			imgMoney[i] = new ImageIcon("./image/money" + i + ".jpg");
+			labelMoney[i] = new JLabel(imgMoney[i]);
+			textMoney[i] = new JTextField();
+			panelMoney.add(labelMoney[i]);
+		}
+		for(int i = 0; i < 5; i++)
+		{
+			panelMoney.add(textMoney[i]);
+			textMoney[i].setPreferredSize(new Dimension(300, 30));
+		}
+		
 		
 		
 		JButton btnSales = new JButton("판매 메뉴");
@@ -121,6 +147,17 @@ public class AdminMenu extends JPanel
 		add(btnPrice);
 		
 		JButton btnMoney = new JButton("화폐 현황");
+		
+		btnMoney.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				layoutAdmin.show(panelAdmin, "money");
+				for(int i = 0; i < 5; i++)
+					textMoney[i].setText(Integer.toString(sell.money.getNowoney(i)));
+			}
+		});
 		add(btnMoney);
 
 		

@@ -125,7 +125,7 @@ public class Machine extends JFrame
 		
 		panelCard.add(new SalesMenu(sell, layoutCard, panelCard), "sales");
 		panelCard.add(new PasswordMenu(layoutCard, panelCard, admin), "password");
-		panelCard.add(new AdminMenu(layoutCard, panelCard), "manager");
+		panelCard.add(new AdminMenu(layoutCard, panelCard, sell), "manager");
 		panelCard.add(new ChangePwMenu(layoutCard, panelCard, admin), "changePw");
 		
 		add(panelCard);
