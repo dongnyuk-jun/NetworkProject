@@ -13,40 +13,75 @@ public class AdminMenu extends JPanel
 	{
 		setLayout(new FlowLayout());
 		
-		JPanel panelCollect = new JPanel();
-		
-		JPanel panelName = new JPanel();
-		
-		JPanel panelPrice = new JPanel();
-		
-		JPanel panelMoney = new JPanel();
-		
+		//관리자 메뉴 panel
+		JPanel panelEmpty = new JPanel();		
+		JPanel panelCollect = new JPanel();		
+		JPanel panelName = new JPanel();		
+		JPanel panelPrice = new JPanel();		
+		JPanel panelMoney = new JPanel();		
 		JPanel panelChangeName = new JPanel();
 		
-
+		//card panel 설정
 		CardLayout layoutAdmin = new CardLayout();
 		JPanel panelAdmin = new JPanel(layoutAdmin);
 		panelAdmin.setPreferredSize(new Dimension(1900, 800));
 		
+		//paneladmin에 관리자 메뉴 panel 설정
+		panelAdmin.add(panelEmpty, "empty");
 		panelAdmin.add(panelCollect, "collect");
 		panelAdmin.add(panelName, "name");
 		panelAdmin.add(panelPrice, "price");
 		panelAdmin.add(panelMoney, "money");
 		panelAdmin.add(panelChangeName, "changeName");
 		
+		////////////////////////
 		panelCollect.setBackground(Color.red);
 		panelName.setBackground(Color.orange);
 		panelPrice.setBackground(Color.yellow);
 		panelMoney.setBackground(Color.green);
 		panelChangeName.setBackground(Color.blue);
+		/////////////////////////
 		
 		add(panelAdmin);
 		
+		//수금 관련 변수
+		JTextField textCollect = new JTextField();
+		JButton btnCollectOK = new JButton("확인");
 
+		//이름 변경 관련 변수
 		JButton [] btnNameItem = new JButton[6];
 		ImageIcon [] imgItem = new ImageIcon[6];
+		JTextField textNewName = new JTextField();
+		
+		//가격 변경 관련 변수
+		JButton [] btnPriceItem = new JButton[6];
+		
+		//가격 현황 관련 변수
+		ImageIcon [] imgMoney = new ImageIcon[5];
+		JLabel [] labelMoney = new JLabel[5];
+		JTextField [] textMoney = new JTextField[5];
+		
 		for(int i = 0; i < 6;i++)
 			imgItem[i] = new ImageIcon("./image/item" + i + ".jpg");
+		
+		////////////////////////////////////////////////////////////////////////////		
+		
+		textCollect.setFont(new Font("나눔고딕", Font.BOLD, 15));
+		panelCollect.add(textCollect);
+		
+		btnCollectOK.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				layoutAdmin.show(panelAdmin, "empty");
+			}
+		});
+		panelCollect.add(btnCollectOK);
+		
+		
+		
+		////////////////////////////////////////////////////////////////////////////
 			
 		for(int i = 0; i < 6; i++)
 		{
@@ -63,8 +98,19 @@ public class AdminMenu extends JPanel
 			});
 			panelName.add(btnNameItem[i]);
 		}
+
+		textNewName.setPreferredSize(new Dimension(400, 30));
+		panelChangeName.add(textNewName);
 		
-		JButton [] btnPriceItem = new JButton[6];
+		JButton btnOK = new JButton("확인");
+		panelChangeName.add(btnOK);
+		
+		//////////////////////////////////////////////////////////////////////////
+		
+		
+		
+		//////////////////////////////////////////////////////////////////////////
+		
 		for(int i = 0; i < 6; i++)
 		{
 			btnPriceItem[i] = new JButton(Integer.toString(i));
@@ -81,18 +127,13 @@ public class AdminMenu extends JPanel
 			panelPrice.add(btnPriceItem[i]);
 		}
 		
+		//////////////////////////////////////////////////////////////////////////
 
-		JTextField textNewName = new JTextField();
-		textNewName.setPreferredSize(new Dimension(400, 30));
-		panelChangeName.add(textNewName);
+
 		
-		JButton btnOK = new JButton("확인");
-		panelChangeName.add(btnOK);
-
-
-		ImageIcon [] imgMoney = new ImageIcon[5];
-		JLabel [] labelMoney = new JLabel[5];
-		JTextField [] textMoney = new JTextField[5];
+		//////////////////////////////////////////////////////////////////////////
+		
+		
 		for(int i = 0; i < 5; i++)
 		{
 			imgMoney[i] = new ImageIcon("./image/money" + i + ".jpg");
@@ -106,6 +147,7 @@ public class AdminMenu extends JPanel
 			textMoney[i].setPreferredSize(new Dimension(300, 30));
 		}
 		
+		//////////////////////////////////////////////////////////////////////////
 		
 		
 		JButton btnSales = new JButton("판매 메뉴");
@@ -121,8 +163,21 @@ public class AdminMenu extends JPanel
 		});
 		add(btnSales);
 		
+		//////////////////////////////////////////////////////////////////////////
+		
 		JButton btnCollect = new JButton("수금");
+		btnCollect.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				layoutAdmin.show(panelAdmin, "collect");
+				textCollect.setText(Integer.toString(sell.money.collectMoney()) + "원이 수금되었습니다.");
+			}		
+		});
 		add(btnCollect);
+		
+		//////////////////////////////////////////////////////////////////////////
 		
 		JButton btnName = new JButton("이름 변경");
 		btnName.addActionListener(new ActionListener()
@@ -135,6 +190,8 @@ public class AdminMenu extends JPanel
 		});
 		add(btnName);
 		
+		//////////////////////////////////////////////////////////////////////////
+		
 		JButton btnPrice = new JButton("가격 변경");
 		btnPrice.addActionListener(new ActionListener()
 		{
@@ -146,6 +203,8 @@ public class AdminMenu extends JPanel
 		});
 		add(btnPrice);
 		
+		//////////////////////////////////////////////////////////////////////////
+		
 		JButton btnMoney = new JButton("화폐 현황");
 		
 		btnMoney.addActionListener(new ActionListener()
@@ -155,10 +214,12 @@ public class AdminMenu extends JPanel
 			{
 				layoutAdmin.show(panelAdmin, "money");
 				for(int i = 0; i < 5; i++)
-					textMoney[i].setText(Integer.toString(sell.money.getNowoney(i)));
+					textMoney[i].setText(Integer.toString(sell.money.getNowMoney(i)));
 			}
 		});
 		add(btnMoney);
+		
+		//////////////////////////////////////////////////////////////////////////
 
 		
 		JButton btnChangePw = new JButton("비밀번호 변경");
@@ -172,6 +233,8 @@ public class AdminMenu extends JPanel
 			
 		});
 		add(btnChangePw);
+		
+		//////////////////////////////////////////////////////////////////////////
 		
 		
 		setVisible(true);

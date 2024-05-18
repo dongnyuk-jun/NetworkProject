@@ -1,10 +1,12 @@
 package VendingMachine;
 
 import java.io.*;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Admin implements Runnable
 {
+	int id;
 	private String password;
 	String [] basicName = {"물", "커피", "이온음료", "고급커피", "탄산음료", "특화음료" };
 	int [] basicPrice = {450, 500, 550, 700, 750, 800};
@@ -29,11 +31,14 @@ public class Admin implements Runnable
 		BufferedWriter bw = null;
 
 		password = newPassword;
-		try {
+		try
+		{
 			bw = new BufferedWriter(new FileWriter("./manager/password.txt"));
+			bw.write(Integer.toString(id) + "\n");
 			bw.write(password);
 			bw.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -53,22 +58,33 @@ public class Admin implements Runnable
 			
 			try {
 				bf = readerPassword.readLine();
+				id = Integer.parseInt(bf);
+				bf = readerPassword.readLine();
 				password = bf;
+				System.out.println(id);
 				System.out.println(password);
-			} catch (IOException e) {
+			} 
+			catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		} catch (FileNotFoundException e)
+		}
+		catch (FileNotFoundException e)
 		{
 			BufferedWriter bw;
-			try {
+			try
+			{
+				Random random = new Random();
+				random.setSeed(System.currentTimeMillis());
 				bw = new BufferedWriter(new FileWriter("./manager/password.txt"));
+				id = random.nextInt();
 				password = "12345678!";
+				bw.write(Integer.toString(id) + "\n");
 				bw.write(password);
 				bw.close();
-			} catch (IOException e1) {
+			}
+			catch (IOException e1)
+			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -89,14 +105,18 @@ public class Admin implements Runnable
 					Item item = new Item(name, count, price);
 					sell.addItems(item);
 			}
-			try {
+			try
+			{
 				readerBeverage.close();
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-		} catch (FileNotFoundException e)
+		}
+		catch (FileNotFoundException e)
 		{
 			BufferedWriter bw = null;
 			try {
@@ -105,20 +125,25 @@ public class Admin implements Runnable
 				{
 					bw.write(basicName[i] + "\t10\t" + basicPrice[i] + "\n");
 				}
-			} catch (IOException e1) {
+			}
+			catch (IOException e1)
+			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			try {
+			try
+			{
 				bw.close();
-			} catch (IOException e1) {
+			}
+			catch (IOException e1)
+			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			
 		}
-		
 	}
 }

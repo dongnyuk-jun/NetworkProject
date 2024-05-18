@@ -114,7 +114,6 @@ public class Money
 	
 	public void useMoney(int price)
 	{
-		
 		BufferedReader moneyReader = null;
 		BufferedWriter moneyWriter = null;
 		try
@@ -223,6 +222,9 @@ public class Money
 	
 	public void returnMoney()
 	{
+		for(int i = 0; i < 5; i++)
+			input.set(i, 0);
+		
 		BufferedReader moneyReader = null;
 		try
 		{
@@ -310,10 +312,38 @@ public class Money
 		}
 	}
 	
-	public int getNowoney(int i)
+	public int getNowMoney(int i)
 	{
 		if(i > 5)
 			return -1;
 		return money.get(i);
+	}
+	
+	public int collectMoney()
+	{
+		int collect = 0;
+
+		collect += money.get(0) * 10;
+		collect += money.get(1) * 50;
+		collect += money.get(2) * 100;
+		collect += money.get(3) * 500;
+		collect += money.get(4) * 1000;
+		
+		BufferedWriter moneyWriter = null;
+		String txtMoney = "30\r\n" + "30\r\n" + "100\r\n" + "100\r\n" + "20\r\n" + "";
+		
+		try
+		{
+			moneyWriter = new BufferedWriter(new FileWriter("./manager/money.txt"));
+			moneyWriter.write(txtMoney);
+			moneyWriter.close();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return collect;
 	}
 }
