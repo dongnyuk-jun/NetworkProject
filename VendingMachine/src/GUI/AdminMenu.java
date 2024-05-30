@@ -20,6 +20,7 @@ public class AdminMenu extends JPanel
 		JPanel panelPrice = new JPanel();		
 		JPanel panelMoney = new JPanel();		
 		JPanel panelChangeName = new JPanel();
+		JPanel panelChangePrice = new JPanel();
 		
 		//card panel 설정
 		CardLayout layoutAdmin = new CardLayout();
@@ -33,6 +34,7 @@ public class AdminMenu extends JPanel
 		panelAdmin.add(panelPrice, "price");
 		panelAdmin.add(panelMoney, "money");
 		panelAdmin.add(panelChangeName, "changeName");
+		panelAdmin.add(panelChangePrice, "changePrice");
 		
 		////////////////////////
 		panelCollect.setBackground(Color.red);
@@ -55,6 +57,7 @@ public class AdminMenu extends JPanel
 		
 		//가격 변경 관련 변수
 		JButton [] btnPriceItem = new JButton[6];
+		JTextField textNewPrice = new JTextField();
 		
 		//가격 현황 관련 변수
 		ImageIcon [] imgMoney = new ImageIcon[5];
@@ -82,10 +85,10 @@ public class AdminMenu extends JPanel
 		
 		
 		////////////////////////////////////////////////////////////////////////////
-			
+		
 		for(int i = 0; i < 6; i++)
 		{
-			btnNameItem[i] = new JButton(Integer.toString(i));
+			btnNameItem[i] = new JButton(sell.items.get(i).getName());
 			btnNameItem[i].setIcon(imgItem[i]);
 			
 			btnNameItem[i].addActionListener(new ActionListener()
@@ -93,6 +96,9 @@ public class AdminMenu extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
+					String originName = e.getActionCommand();
+					sell.setOriginName(originName);
+					textNewName.setText(originName);
 					layoutAdmin.show(panelAdmin, "changeName");
 				}
 			});
@@ -103,6 +109,18 @@ public class AdminMenu extends JPanel
 		panelChangeName.add(textNewName);
 		
 		JButton btnOK = new JButton("확인");
+		btnOK.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String newName = textNewName.getText();
+				sell.setNewName(newName);
+				sell.changeItemName();
+				textNewName.setText("");
+				layoutAdmin.show(panelAdmin, "empty");
+			}
+		});
 		panelChangeName.add(btnOK);
 		
 		//////////////////////////////////////////////////////////////////////////
@@ -113,7 +131,7 @@ public class AdminMenu extends JPanel
 		
 		for(int i = 0; i < 6; i++)
 		{
-			btnPriceItem[i] = new JButton(Integer.toString(i));
+			btnPriceItem[i] = new JButton(sell.items.get(i).getName());
 			btnPriceItem[i].setIcon(imgItem[i]);
 			
 			btnPriceItem[i].addActionListener(new ActionListener()
@@ -121,11 +139,39 @@ public class AdminMenu extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					
+					String originPrice = e.getActionCommand();
+					sell.setOriginName(originPrice);
+					textNewPrice.setText(Integer.toString(sell.getItemPrice(originPrice)));
+					layoutAdmin.show(panelAdmin, "changePrice");
 				}
 			});
 			panelPrice.add(btnPriceItem[i]);
 		}
+		
+		textNewPrice.setPreferredSize(new Dimension(400, 30));
+		panelChangePrice.add(textNewPrice);
+		
+		JButton btnOk = new JButton("확인");
+		btnOk.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String newPrice = textNewPrice.getText();
+				if(newPrice.chars().allMatch(Character::isDigit))
+				{
+					sell.setNewPrice(newPrice);
+					sell.changeItemPrice();
+					textNewPrice.setText("");
+					layoutAdmin.show(panelAdmin, "empty");
+				}
+				else
+				{
+					textNewPrice.setText("숫자만 입력해주세요.");
+				}
+			}
+		});
+		panelChangePrice.add(btnOk);
 		
 		//////////////////////////////////////////////////////////////////////////
 

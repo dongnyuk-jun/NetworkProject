@@ -136,4 +136,8 @@ public class Machine extends JFrame
 	}
 
 }
-//*/
+/*
+문제점
+코드가 없는 것이 있음(-)
+근데 의약품 코드가 처방전의 primary key임
+*/

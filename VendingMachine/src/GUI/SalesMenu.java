@@ -96,7 +96,7 @@ public class SalesMenu extends JPanel
 		for(int i = 0; i < 6; i++)
 		{
 			imgItems[i] = new ImageIcon("./image/item" + i + ".jpg");
-			btnItems[i] = new JButton(Integer.toString(i));
+			btnItems[i] = new JButton(itemName.get(i));
 			btnItems[i].setIcon(imgItems[i]);
 			btnItems[i].setBorderPainted(false);
 			btnItems[i].setBackground(Color.DARK_GRAY);
@@ -109,7 +109,7 @@ public class SalesMenu extends JPanel
 					// TODO Auto-generated method stub
 					JButton btn = (JButton)e.getSource();
 					String value = e.getActionCommand();
-					if(sell.sellItem(Integer.parseInt(value)))
+					if(sell.sellItem(value))
 					{
 						btn.setEnabled(false);
 					}

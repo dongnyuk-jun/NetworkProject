@@ -44,7 +44,18 @@ public class Admin implements Runnable
 		}
 	}
 
+	public void changeItemName(String origin, String newName)
+	{
+		System.out.println("기존 이름: " + origin);
+		System.out.println("새 이름: " + newName);
+	}
 
+	public void changeItemPrice(String item, String newPrice)
+	{
+		System.out.println("바꿀 상품: " + item);
+		System.out.println("새 가격: " + newPrice);
+	}
+	
 	@Override
 	public void run()  
 	{

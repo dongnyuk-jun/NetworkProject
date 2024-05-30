@@ -14,6 +14,9 @@ public class Sell implements Runnable
 	Admin admin;
 	public Money money;
 	
+	String originName, newName;
+	String newPrice;
+	
 	public Sell(VendingMachine vendingMachine)
 	{
 		this.vendingMachine = vendingMachine;
@@ -38,9 +41,45 @@ public class Sell implements Runnable
 		items.add(newItem);
 	}
 	
-	public boolean sellItem(int id)
+	public int getItemPrice(String name)
 	{
-		if(items.get(id).count > 0)
+		int value = 0;
+		for(int i = 0; i < 6; i++)
+		{
+			if(items.get(i).getName().equals(name))
+				value = items.get(i).getPrice();
+		}
+		return value;
+	}
+	
+	public void setOriginName(String origin)
+	{
+		originName = origin;
+	}
+	
+	public void setNewName(String newName)
+	{
+		this.newName = newName;
+	}
+	
+	public void changeItemName()
+	{
+		admin.changeItemName(originName, newName);
+	}
+	
+	public void setNewPrice(String newPrice)
+	{
+		this.newPrice = newPrice;
+	}	
+	
+	public void changeItemPrice()
+	{
+		admin.changeItemPrice(originName, newPrice);
+	}
+	
+	public boolean sellItem(String value)
+	{
+		if(findItem(value).count > 0)
 		{
 			try
 			{
@@ -54,16 +93,16 @@ public class Sell implements Runnable
 					String name = st.nextToken();
 					String count = st.nextToken();
 					String price = st.nextToken();
-					if(id == i)
+					if(value.equals(name))
 					{
 						int tmpCount = Integer.parseInt(count);
-						if(items.get(id).soldout == false)
+						if(findItem(value).soldout == false)
 						{
 							tmpCount--;
-							money.useMoney(items.get(id).price);
+							money.useMoney(findItem(value).price);
 						}
 						if(tmpCount == 0)
-							items.get(id).soldout = true;
+							findItem(value).soldout = true;
 						count = Integer.toString(tmpCount);
 					}
 					txtItemInfo += name + "\t" + count + "\t" + price + "\n";
@@ -83,6 +122,16 @@ public class Sell implements Runnable
 			}
 		}
 		
-		return items.get(id).soldout;
+		return findItem(value).soldout;
+	}
+	
+	Item findItem(String name)
+	{
+		for(int i = 0; i < items.size(); i++)
+		{
+			if(items.get(i).getName().equals(name))
+				return items.get(i);
+		}
+		return null;
 	}
 }
