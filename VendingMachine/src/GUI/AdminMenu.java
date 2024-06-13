@@ -223,7 +223,7 @@ public class AdminMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				layoutAdmin.show(panelAdmin, "collect");
-				textCollect.setText(Integer.toString(sell.money.collectMoney()) + "원이 수금되었습니다.");
+				textCollect.setText("수금되었습니다.");
 				re();
 			}		
 		});
