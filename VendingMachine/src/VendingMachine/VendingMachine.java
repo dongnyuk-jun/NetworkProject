@@ -14,6 +14,10 @@ public class VendingMachine
 	
 	public static void main(String [] args) throws IOException
 	{
+		File path = new File("./manager");
+		if(!path.exists() && !path.isDirectory())
+			path.mkdir();
+		
 		new VendingMachine("127.0.0.1", 1345);
 	}
 	
@@ -59,11 +63,13 @@ public class VendingMachine
 				}
 				out.writeUTF(id);
 
+				
 				// 파일 전송
 				sendFile(out, "./manager/password.txt");
 				sendFile(out, "./manager/money.txt");
 				sendFile(out, "./manager/beverage.txt");
 				sendFile(out, "./manager/AllRecord.txt");
+				
 
 				out.close();
 				socket.close();

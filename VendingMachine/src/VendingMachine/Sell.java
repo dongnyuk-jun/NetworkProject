@@ -133,6 +133,7 @@ public class Sell implements Runnable
 		{
 			
 		}
+		send();
 	}
 	
 	public boolean sellItem(String value)
@@ -195,7 +196,7 @@ public class Sell implements Runnable
 			return true;
 		}
 		
-		vendingMachine.sendFiles();
+		send();
 		return findItem(value).soldout;
 	}
 	

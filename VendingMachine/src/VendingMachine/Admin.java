@@ -140,21 +140,32 @@ public class Admin implements Runnable
 		}
 		catch (FileNotFoundException e)
 		{
-			BufferedWriter bw;
+			BufferedWriter bw1, bw2;
 			try
 			{
 				Random random = new Random();
 				random.setSeed(System.currentTimeMillis());
-				bw = new BufferedWriter(new FileWriter("./manager/password.txt"));
+				bw1 = new BufferedWriter(new FileWriter("./manager/password.txt"));
 				id = random.nextInt();
 				password = "12345678!";
-				bw.write(Integer.toString(id) + "\n");
-				bw.write(password);
-				bw.close();
+				bw1.write(Integer.toString(id) + "\n");
+				bw1.write(password);
+				bw1.close();
 			}
 			catch (IOException e1)
 			{
 				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			try
+			{
+				bw2 = new BufferedWriter(new FileWriter("./manager/money.txt"));
+				bw2.write("10\n10\n10\n10\n10\n");
+				bw2.close();
+			}
+			catch (IOException e1)
+			{
 				e1.printStackTrace();
 			}
 		}
@@ -193,6 +204,8 @@ public class Admin implements Runnable
 				for(int i = 0; i < 6; i++)
 				{
 					bw.write(basicName[i] + "\t10\t" + basicPrice[i] + "\n");
+					Item item = new Item(basicName[i], 10, basicPrice[i]);
+					sell.addItems(item);
 				}
 			}
 			catch (IOException e1)
