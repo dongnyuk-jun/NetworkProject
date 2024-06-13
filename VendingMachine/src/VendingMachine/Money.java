@@ -247,8 +247,6 @@ public class Money
 		
 		while(balance != 0)
 		{
-			System.out.println(balance);
-			//
 			if(balance >= 1000)
 			{
 				if(money.get(4) >= balance / 1000)

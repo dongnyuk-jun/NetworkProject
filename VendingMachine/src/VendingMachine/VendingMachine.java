@@ -14,57 +14,104 @@ public class VendingMachine
 	
 	public static void main(String [] args) throws IOException
 	{
-		//1
 		new VendingMachine("127.0.0.1", 1345);
 	}
 	
+	
+	
 	VendingMachine(String address, int port) throws IOException
 	{
-		while(true)
+		sendFiles();
+		sell = new Sell(this);
+		Thread sellThread = new Thread(sell);
+		sellThread.start();
+	}
+	
+	public void sendFiles() {
+		while (true)
 		{
 			try
 			{
-				socket = new Socket(address, port);		//서버에 연결
-			
-				out = socket.getOutputStream();
-				fin = new FileInputStream("./manager/beverage.txt");
+				Socket socket = new Socket("127.0.0.1", 1345); // 서버에 연결
+				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+				// ID 전송
+				String id = "-1"; // 예시 ID
+				BufferedReader readerPassword = null;
 				
-				byte [] buffer = new byte[4096];
-				int bytesRead;
-				while((bytesRead = fin.read(buffer)) != -1)
+				try
 				{
-					out.write(buffer, 0, bytesRead);
+					readerPassword = new BufferedReader(new FileReader("./manager/password.txt"));
+					String bf;
+					
+					try
+					{
+						id = readerPassword.readLine();
+					}
+					catch(IOException e)
+					{
+						System.out.println(123);
+					}
 				}
-				System.out.println("전송 완료");
-				sell = new Sell(this);
-				Thread sellThread = new Thread(sell);
-				sellThread.start();
+				catch (IOException e)
+				{
+					
+				}
+				out.writeUTF(id);
+
+				// 파일 전송
+				sendFile(out, "./manager/password.txt");
+				sendFile(out, "./manager/money.txt");
+				sendFile(out, "./manager/beverage.txt");
+				sendFile(out, "./manager/AllRecord.txt");
+
+				out.close();
+				socket.close();
 				break;
 			}
-			catch (UnknownHostException e)
+			catch(UnknownHostException e)
 			{
 				System.err.println("호스트를 찾을 수 없음...");
-				try {
+				try
+				{
 					Thread.sleep(1000);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				}
+				catch (InterruptedException e1)
+				{
+					e1.printStackTrace();
 				}
 			}
 			catch (IOException e)
 			{
 				System.err.println("서버에 연결할 수 없음...");
-				try {
+				try
+				{
 					Thread.sleep(1000);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-			}
-			finally
-			{
-				
+				catch (InterruptedException e1)
+				{
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
+
+	private void sendFile(DataOutputStream out, String filePath) throws IOException
+	{
+		File file = new File(filePath);
+		FileInputStream fin = new FileInputStream(file);
+		long fileSize = file.length();
+
+		out.writeUTF(file.getName());
+		out.writeLong(fileSize);
+
+		byte[] buffer = new byte[4096];
+		int bytesRead;
+		while ((bytesRead = fin.read(buffer)) != -1)
+		{
+			out.write(buffer, 0, bytesRead);
+		}
+		fin.close();
+	}
 }
+

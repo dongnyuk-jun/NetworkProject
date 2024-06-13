@@ -11,9 +11,9 @@ import VendingMachine.Sell;
 
 public class SalesMenu extends JPanel
 {
-	Vector<String> itemName = new Vector<String>();
+	public Vector<String> itemName = new Vector<String>();
 
-	JButton [] btnItems = new JButton[6];
+	public JButton [] btnItems = new JButton[6];
 	ImageIcon [] imgItems = new ImageIcon[6];
 	
 
@@ -30,7 +30,7 @@ public class SalesMenu extends JPanel
 		
 		JPanel panelTop = new JPanel();
 		panelTop.setPreferredSize(new Dimension(1900, 108));
-		panelTop.setBackground(Color.YELLOW);
+		//panelTop.setBackground(Color.YELLOW);
 
 		makeBlank(panelTop, new Dimension(500, 30));
 		
@@ -91,8 +91,8 @@ public class SalesMenu extends JPanel
 		
 		JPanel panelItems = new JPanel();
 		panelItems.setPreferredSize(panelSize);
-		panelItems.setBackground(Color.GREEN);
-		
+		//panelItems.setBackground(Color.GREEN);
+
 		for(int i = 0; i < 6; i++)
 		{
 			imgItems[i] = new ImageIcon("./image/item" + i + ".jpg");
@@ -134,7 +134,7 @@ public class SalesMenu extends JPanel
 		
 		JPanel panelMoney = new JPanel();
 		panelMoney.setPreferredSize(panelSize);
-		panelMoney.setBackground(Color.BLUE);
+		//panelMoney.setBackground(Color.BLUE);
 		
 		for(int i = 0; i < 5; i++)
 		{

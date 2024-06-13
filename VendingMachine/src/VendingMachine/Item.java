@@ -17,9 +17,14 @@ public class Item
 			soldout = true;
 	}
 	
-	public void supplemnet(int supple)
+	public void supplemet(int supple)
 	{
 		count += supple;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 	
 	public String getName()
@@ -27,9 +32,19 @@ public class Item
 		return name;
 	}
 	
+	public void setCount(int count)
+	{
+		this.count = count;
+	}
+	
 	public int getCount()
 	{
 		return count;
+	}
+	
+	public void setPrice(int price)
+	{
+		this.price = price;
 	}
 	
 	public int getPrice()

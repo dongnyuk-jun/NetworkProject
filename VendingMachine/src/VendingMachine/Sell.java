@@ -3,7 +3,11 @@ package VendingMachine;
 import java.io.*;
 import java.util.*;
 
+import GUI.AdminMenu;
+import GUI.ChangePwMenu;
 import GUI.Machine;
+import GUI.PasswordMenu;
+import GUI.SalesMenu;
 
 public class Sell implements Runnable
 {
@@ -12,6 +16,13 @@ public class Sell implements Runnable
 	Vector<Item> updateItems = new Vector<Item>();
 	Machine machine;
 	Admin admin;
+	SaleRecord record;
+	
+	public SalesMenu salesmenu;
+	public PasswordMenu pwmenu;
+	public AdminMenu adminmenu;
+	public ChangePwMenu changepwmenu;
+	
 	public Money money;
 	
 	String originName, newName;
@@ -22,7 +33,7 @@ public class Sell implements Runnable
 		this.vendingMachine = vendingMachine;
 		money = new Money();
 		admin = new Admin(vendingMachine, this);
-		
+		record = new SaleRecord(items);
 		
 		Thread adminThread = new Thread(admin);
 		adminThread.start();
@@ -33,8 +44,9 @@ public class Sell implements Runnable
 	{
 		// TODO Auto-generated method stub
 		machine = new Machine(this, admin);
+		record.readAllRecord();
 	}
-
+	
 	public void addItems(Item newItem)
 	{
 		newItem.soldout = false;
@@ -65,6 +77,14 @@ public class Sell implements Runnable
 	public void changeItemName()
 	{
 		admin.changeItemName(originName, newName);
+		findItem(originName).setName(newName);
+		for(int i = 0; i < 6; i++)
+		{
+			salesmenu.btnItems[i].setText(items.get(i).getName());
+			adminmenu.btnPriceItem[i].setText(items.get(i).getName());
+			adminmenu.btnNameItem[i].setText(items.get(i).getName());
+		}
+		send();
 	}
 	
 	public void setNewPrice(String newPrice)
@@ -75,6 +95,44 @@ public class Sell implements Runnable
 	public void changeItemPrice()
 	{
 		admin.changeItemPrice(originName, newPrice);
+		for(int i = 0; i < 6; i++)
+		{
+			if(items.get(i).getName().equals(originName))
+				items.get(i).price = Integer.parseInt(newPrice);
+		}
+		send();
+	}
+	
+	public void refill()
+	{
+		try
+		{
+			String txtItemInfo = "";
+			BufferedReader itemReader = new BufferedReader(new FileReader("./manager/beverage.txt"));
+			StringTokenizer st;
+			
+			for(int i = 0; i < 6; i++)
+			{
+				st = new StringTokenizer(itemReader.readLine());
+				String name = st.nextToken();
+				String count = st.nextToken();
+				String price = st.nextToken();
+				count = "10";
+				txtItemInfo += name + "\t" + count + "\t" + price + "\n";
+			}
+			itemReader.close();
+			
+			BufferedWriter itemWriter = new BufferedWriter(new FileWriter("./manager/beverage.txt"));
+			itemWriter.write(txtItemInfo);
+			itemWriter.close();
+			
+		} catch (FileNotFoundException e)
+		{
+			
+		} catch (IOException e)
+		{
+			
+		}
 	}
 	
 	public boolean sellItem(String value)
@@ -96,13 +154,15 @@ public class Sell implements Runnable
 					if(value.equals(name))
 					{
 						int tmpCount = Integer.parseInt(count);
+						if(tmpCount < 1)
+						{
+							findItem(value).soldout = true;
+						}
 						if(findItem(value).soldout == false)
 						{
 							tmpCount--;
 							money.useMoney(findItem(value).price);
 						}
-						if(tmpCount == 0)
-							findItem(value).soldout = true;
 						count = Integer.toString(tmpCount);
 					}
 					txtItemInfo += name + "\t" + count + "\t" + price + "\n";
@@ -120,8 +180,22 @@ public class Sell implements Runnable
 			{
 				
 			}
+			
+			for(int i = 0; i < 6; i++)
+			{
+				if(items.get(i).getName().equals(value))
+				{
+					record.recordSell(i);
+					record.saveAllRecord();
+				}
+			}
+		}
+		else
+		{
+			return true;
 		}
 		
+		vendingMachine.sendFiles();
 		return findItem(value).soldout;
 	}
 	
@@ -133,5 +207,10 @@ public class Sell implements Runnable
 				return items.get(i);
 		}
 		return null;
+	}
+	
+	public void send()
+	{
+		vendingMachine.sendFiles();
 	}
 }

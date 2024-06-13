@@ -9,6 +9,8 @@ import VendingMachine.Sell;
 
 public class AdminMenu extends JPanel
 {
+	public JButton [] btnNameItem; 
+	public JButton [] btnPriceItem;
 	public AdminMenu(CardLayout layoutCard, JPanel panelCard, Sell sell)
 	{
 		setLayout(new FlowLayout());
@@ -36,14 +38,6 @@ public class AdminMenu extends JPanel
 		panelAdmin.add(panelChangeName, "changeName");
 		panelAdmin.add(panelChangePrice, "changePrice");
 		
-		////////////////////////
-		panelCollect.setBackground(Color.red);
-		panelName.setBackground(Color.orange);
-		panelPrice.setBackground(Color.yellow);
-		panelMoney.setBackground(Color.green);
-		panelChangeName.setBackground(Color.blue);
-		/////////////////////////
-		
 		add(panelAdmin);
 		
 		//수금 관련 변수
@@ -51,12 +45,12 @@ public class AdminMenu extends JPanel
 		JButton btnCollectOK = new JButton("확인");
 
 		//이름 변경 관련 변수
-		JButton [] btnNameItem = new JButton[6];
+		btnNameItem = new JButton[6];
 		ImageIcon [] imgItem = new ImageIcon[6];
 		JTextField textNewName = new JTextField();
 		
 		//가격 변경 관련 변수
-		JButton [] btnPriceItem = new JButton[6];
+		btnPriceItem = new JButton[6];	//이름 변동 시 동기화를 위해 public 선언
 		JTextField textNewPrice = new JTextField();
 		
 		//가격 현황 관련 변수
@@ -78,6 +72,7 @@ public class AdminMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				layoutAdmin.show(panelAdmin, "empty");
+				re();
 			}
 		});
 		panelCollect.add(btnCollectOK);
@@ -100,6 +95,7 @@ public class AdminMenu extends JPanel
 					sell.setOriginName(originName);
 					textNewName.setText(originName);
 					layoutAdmin.show(panelAdmin, "changeName");
+					re();
 				}
 			});
 			panelName.add(btnNameItem[i]);
@@ -119,6 +115,9 @@ public class AdminMenu extends JPanel
 				sell.changeItemName();
 				textNewName.setText("");
 				layoutAdmin.show(panelAdmin, "empty");
+				sell.salesmenu.revalidate();
+				sell.salesmenu.repaint();
+				re();
 			}
 		});
 		panelChangeName.add(btnOK);
@@ -143,6 +142,7 @@ public class AdminMenu extends JPanel
 					sell.setOriginName(originPrice);
 					textNewPrice.setText(Integer.toString(sell.getItemPrice(originPrice)));
 					layoutAdmin.show(panelAdmin, "changePrice");
+					re();
 				}
 			});
 			panelPrice.add(btnPriceItem[i]);
@@ -164,6 +164,7 @@ public class AdminMenu extends JPanel
 					sell.changeItemPrice();
 					textNewPrice.setText("");
 					layoutAdmin.show(panelAdmin, "empty");
+					re();
 				}
 				else
 				{
@@ -204,6 +205,10 @@ public class AdminMenu extends JPanel
 			{
 				// TODO Auto-generated method stub
 				layoutCard.show(panelCard, "sales");
+				
+				sell.salesmenu.revalidate();
+				sell.salesmenu.repaint();
+				re();
 			}
 			
 		});
@@ -219,9 +224,25 @@ public class AdminMenu extends JPanel
 			{
 				layoutAdmin.show(panelAdmin, "collect");
 				textCollect.setText(Integer.toString(sell.money.collectMoney()) + "원이 수금되었습니다.");
+				re();
 			}		
 		});
 		add(btnCollect);
+		
+		//////////////////////////////////////////////////////////////////////////
+		
+		JButton btnRefill = new JButton("재고채우기");
+		btnRefill.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				sell.refill();
+				re();
+			}		
+		});
+		add(btnRefill);
+		
 		
 		//////////////////////////////////////////////////////////////////////////
 		
@@ -232,6 +253,7 @@ public class AdminMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				layoutAdmin.show(panelAdmin, "name");
+				re();
 			}
 		});
 		add(btnName);
@@ -245,6 +267,7 @@ public class AdminMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				layoutAdmin.show(panelAdmin, "price");
+				re();
 			}
 		});
 		add(btnPrice);
@@ -261,6 +284,7 @@ public class AdminMenu extends JPanel
 				layoutAdmin.show(panelAdmin, "money");
 				for(int i = 0; i < 5; i++)
 					textMoney[i].setText(Integer.toString(sell.money.getNowMoney(i)));
+				re();
 			}
 		});
 		add(btnMoney);
@@ -275,6 +299,7 @@ public class AdminMenu extends JPanel
 			{
 				// TODO Auto-generated method stub
 				layoutCard.show(panelCard, "changePw");
+				re();
 			}
 			
 		});
@@ -284,5 +309,12 @@ public class AdminMenu extends JPanel
 		
 		
 		setVisible(true);
+	}
+	
+	void re()
+	{
+		
+		revalidate();
+		repaint();
 	}
 }

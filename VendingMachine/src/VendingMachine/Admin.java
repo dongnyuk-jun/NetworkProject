@@ -42,24 +42,84 @@ public class Admin implements Runnable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		sell.send();
 	}
 
 	public void changeItemName(String origin, String newName)
 	{
-		System.out.println("기존 이름: " + origin);
-		System.out.println("새 이름: " + newName);
+		StringBuilder fileContent = new StringBuilder();
+		try(BufferedReader reader = new BufferedReader(new FileReader("./manager/beverage.txt")))
+		{
+			String line;
+			while((line = reader.readLine()) != null)
+			{
+				fileContent.append(line.replaceAll(origin, newName)).append(System.lineSeparator());
+			}
+		}
+		catch(IOException e)
+		{
+			
+		}
+		
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("./manager/beverage.txt")))
+		{
+			writer.write(fileContent.toString());
+		}
+		catch (IOException e)
+		{
+			
+		}
+		read();
 	}
 
 	public void changeItemPrice(String item, String newPrice)
 	{
-		System.out.println("바꿀 상품: " + item);
-		System.out.println("새 가격: " + newPrice);
+		String text = "";
+		try(BufferedReader reader = new BufferedReader(new FileReader("./manager/beverage.txt")))
+		{
+			String line;
+			while((line = reader.readLine()) != null)
+			{
+				StringTokenizer st = new StringTokenizer(line, "\t");
+				if(st.countTokens() == 3)
+				{
+					String name = st.nextToken().trim();
+					String count = st.nextToken().trim();
+					String price = st.nextToken().trim();
+					
+					text += name + "\t" + count + "\t";
+					if(item.equals(name))
+						text += newPrice;
+					else
+						text += price;
+					text += "\n";
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			
+		}
+		
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter("./manager/beverage.txt")))
+		{
+			writer.write(text);
+		}
+		catch (IOException e)
+		{
+			
+		}
 	}
 	
 	@Override
 	public void run()  
 	{
 		// TODO Auto-generated method stub
+		read();
+	}
+	
+	void read()
+	{
 		BufferedReader readerPassword = null;
 		
 		try
@@ -72,8 +132,6 @@ public class Admin implements Runnable
 				id = Integer.parseInt(bf);
 				bf = readerPassword.readLine();
 				password = bf;
-				System.out.println(id);
-				System.out.println(password);
 			} 
 			catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -156,5 +214,7 @@ public class Admin implements Runnable
 		{
 			
 		}
+
+		sell.send();
 	}
 }
